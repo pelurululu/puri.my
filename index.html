@@ -38,11 +38,13 @@
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+      cursor: none;
     }
 
     a {
       color: inherit;
       text-decoration: none;
+      cursor: none;
     }
 
     .page {
@@ -57,6 +59,42 @@
       margin: 0 auto;
     }
 
+    /* ── Custom Cursor ── */
+    #cursor {
+      position: fixed;
+      width: 7px;
+      height: 7px;
+      background: var(--black);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.22s ease, height 0.22s ease, background 0.22s ease, opacity 0.3s ease;
+      mix-blend-mode: multiply;
+    }
+
+    #cursor.large {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ── Scroll Reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.32s; }
+
+    /* ── Site Header ── */
     .site-header {
       position: fixed;
       top: 0;
@@ -126,12 +164,29 @@
       color: var(--grey-700);
     }
 
+    /* ── Nav underline grow ── */
     .nav-links a {
+      position: relative;
       transition: color 0.2s ease;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0%;
+      height: 1px;
+      background: var(--black);
+      transition: width 0.35s cubic-bezier(0.22,1,0.36,1);
     }
 
     .nav-links a:hover {
       color: var(--black);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
     }
 
     .nav-cta {
@@ -148,12 +203,14 @@
       color: var(--white);
     }
 
+    /* ── Hero ── */
     .hero {
       min-height: 100vh;
       display: flex;
       align-items: center;
       padding: 160px 0 96px;
       position: relative;
+      background-attachment: fixed;
     }
 
     .hero-grid {
@@ -242,6 +299,12 @@
       flex-direction: column;
       justify-content: space-between;
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.04);
+      transition: box-shadow 0.4s ease, transform 0.4s ease;
+    }
+
+    .hero-card:hover {
+      box-shadow: 0 40px 100px rgba(0,0,0,0.08);
+      transform: translateY(-4px);
     }
 
     .hero-card-top {
@@ -276,6 +339,11 @@
       border: 1px solid var(--black);
       transform: translateX(-50%) rotate(45deg);
       background: rgba(255,255,255,0.8);
+      transition: transform 0.6s ease;
+    }
+
+    .hero-card:hover .abstract-residence::before {
+      transform: translateX(-50%) rotate(90deg);
     }
 
     .abstract-residence::after {
@@ -302,6 +370,7 @@
       line-height: 1.9;
     }
 
+    /* ── Sections ── */
     .section {
       padding: 118px 0;
       border-top: 1px solid rgba(11, 11, 11, 0.08);
@@ -339,6 +408,7 @@
       margin-top: 32px;
     }
 
+    /* ── Quiet block ── */
     .quiet-block {
       background: var(--black);
       color: var(--white);
@@ -356,6 +426,11 @@
       height: 320px;
       border: 1px solid rgba(255,255,255,0.16);
       border-radius: 50%;
+      transition: transform 1.2s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .quiet-block:hover::after {
+      transform: scale(1.15) rotate(20deg);
     }
 
     .quiet-block .eyebrow {
@@ -374,6 +449,7 @@
       margin-top: 34px;
     }
 
+    /* ── Pillars ── */
     .pillars {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -392,6 +468,24 @@
       justify-content: space-between;
       gap: 36px;
       transition: background 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── Card shimmer ── */
+    .pillar-card::after,
+    .offer-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 0%, rgba(11,11,11,0.04) 50%, transparent 100%);
+      transform: translateX(-100%);
+      transition: transform 0.55s ease;
+    }
+
+    .pillar-card:hover::after,
+    .offer-card:hover::after {
+      transform: translateX(100%);
     }
 
     .pillar-card:hover {
@@ -427,6 +521,7 @@
       line-height: 1.85;
     }
 
+    /* ── Offers ── */
     .offers-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -439,6 +534,13 @@
       background: var(--white);
       padding: 48px;
       min-height: 290px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s ease;
+    }
+
+    .offer-card:hover {
+      background: var(--grey-100);
     }
 
     .offer-meta {
@@ -459,6 +561,7 @@
       display: block;
     }
 
+    /* ── Approach ── */
     .approach-grid {
       display: grid;
       grid-template-columns: 0.9fr 1.1fr;
@@ -474,6 +577,11 @@
     .approach-card {
       padding: 32px 0 32px 34px;
       border-left: 1px solid var(--black);
+      transition: border-color 0.3s ease, padding-left 0.3s ease;
+    }
+
+    .approach-card:hover {
+      padding-left: 42px;
     }
 
     .quote-panel {
@@ -482,6 +590,11 @@
       border: 1px solid var(--grey-300);
       position: sticky;
       top: 116px;
+      transition: box-shadow 0.4s ease;
+    }
+
+    .quote-panel:hover {
+      box-shadow: 0 24px 64px rgba(0,0,0,0.06);
     }
 
     .quote-panel p {
@@ -501,6 +614,7 @@
       margin-top: 42px;
     }
 
+    /* ── Residence types ── */
     .residence-types {
       display: flex;
       flex-wrap: wrap;
@@ -516,8 +630,16 @@
       text-transform: uppercase;
       color: var(--grey-700);
       background: rgba(255,255,255,0.7);
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
     }
 
+    .tag:hover {
+      border-color: var(--black);
+      color: var(--black);
+      background: var(--grey-100);
+    }
+
+    /* ── CTA ── */
     .cta-section {
       padding: 128px 0;
       background: var(--grey-100);
@@ -558,6 +680,7 @@
       margin: 0 0 24px;
     }
 
+    /* ── Footer ── */
     footer {
       background: var(--black);
       color: var(--white);
@@ -575,11 +698,62 @@
       text-transform: uppercase;
     }
 
-    @media (max-width: 980px) {
-      .nav-links {
-        display: none;
-      }
+    /* ── Hero letter animation ── */
+    #hero-title span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
 
+    #hero-title span.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Eyebrow fade-in ── */
+    .hero-eyebrow-anim {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s;
+    }
+    .hero-eyebrow-anim.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-sub-anim {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.7s ease 0.8s, transform 0.7s ease 0.8s;
+    }
+    .hero-sub-anim.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-buttons-anim {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.7s ease 1s, transform 0.7s ease 1s;
+    }
+    .hero-buttons-anim.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-card-anim {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1) 0.5s, transform 0.9s cubic-bezier(0.22,1,0.36,1) 0.5s;
+    }
+    .hero-card-anim.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .nav-links { display: none; }
       .hero-grid,
       .section-header,
       .approach-grid,
@@ -587,76 +761,36 @@
         grid-template-columns: 1fr;
         gap: 44px;
       }
-
-      .hero-card {
-        min-height: auto;
-      }
-
-      .pillars {
-        grid-template-columns: 1fr;
-      }
-
-      .offers-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .quote-panel {
-        position: relative;
-        top: auto;
-      }
+      .hero-card { min-height: auto; }
+      .pillars { grid-template-columns: 1fr; }
+      .offers-grid { grid-template-columns: 1fr; }
+      .quote-panel { position: relative; top: auto; }
     }
 
     @media (max-width: 640px) {
-      .container {
-        width: min(100% - 30px, var(--max));
-      }
-
-      .nav {
-        height: 68px;
-      }
-
-      .brand-lockup {
-        font-size: 12px;
-        letter-spacing: 0.17em;
-      }
-
-      .nav-cta {
-        display: none;
-      }
-
-      .hero {
-        padding: 128px 0 74px;
-      }
-
+      .container { width: min(100% - 30px, var(--max)); }
+      .nav { height: 68px; }
+      .brand-lockup { font-size: 12px; letter-spacing: 0.17em; }
+      .nav-cta { display: none; }
+      .hero { padding: 128px 0 74px; }
       .hero-card,
       .quiet-block,
       .quote-panel,
       .offer-card,
-      .cta-box {
-        padding: 34px;
-      }
-
-      .section {
-        padding: 82px 0;
-      }
-
-      .section-header {
-        margin-bottom: 48px;
-      }
-
-      .pillar-card {
-        padding: 34px;
-        min-height: 300px;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      .cta-box { padding: 34px; }
+      .section { padding: 82px 0; }
+      .section-header { margin-bottom: 48px; }
+      .pillar-card { padding: 34px; min-height: 300px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      body { cursor: auto; }
+      #cursor { display: none; }
     }
   </style>
 </head>
 <body>
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+
   <div class="page">
     <header class="site-header">
       <div class="container nav">
@@ -678,19 +812,19 @@
       <section class="hero">
         <div class="container hero-grid">
           <div>
-            <div class="eyebrow">House of Wangsa · Private Residences</div>
-            <h1>Puri</h1>
-            <div class="hero-subtitle">Private Residences &amp; Bespoke Living</div>
-            <p class="hero-copy">
+            <div class="eyebrow hero-eyebrow-anim">House of Wangsa · Private Residences</div>
+            <h1 id="hero-title"></h1>
+            <div class="hero-subtitle hero-sub-anim">Private Residences &amp; Bespoke Living</div>
+            <p class="hero-copy hero-sub-anim">
               Private residences, estates, and refined living spaces — curated for those who value privacy, permanence, and quiet elegance.
             </p>
-            <div class="button-row">
+            <div class="button-row hero-buttons-anim">
               <a href="#enquiry" class="btn btn-primary">Begin a Private Enquiry</a>
               <a href="#essence" class="btn btn-secondary">Discover Puri</a>
             </div>
           </div>
 
-          <aside class="hero-card" aria-label="Puri signature statement">
+          <aside class="hero-card hero-card-anim" aria-label="Puri signature statement">
             <div>
               <div class="hero-card-top">
                 <span>Private</span>
@@ -711,16 +845,16 @@
       <section class="section" id="essence">
         <div class="container">
           <div class="section-header">
-            <div class="section-kicker">Essence</div>
+            <div class="section-kicker reveal">Essence</div>
             <div>
-              <h2>A residence chosen with restraint. Curated with taste. Preserved with quiet permanence.</h2>
-              <p class="lead">
+              <h2 class="reveal">A residence chosen with restraint. Curated with taste. Preserved with quiet permanence.</h2>
+              <p class="lead reveal reveal-delay-1">
                 Puri is the private residence and bespoke living arm of House of Wangsa — dedicated to refined homes, private estates, and living spaces shaped by discretion, taste, and enduring value.
               </p>
             </div>
           </div>
 
-          <div class="quiet-block">
+          <div class="quiet-block reveal">
             <div class="eyebrow">Philosophy</div>
             <h2>True luxury does not need to announce itself.</h2>
             <p>
@@ -733,14 +867,14 @@
       <section class="section" id="pillars">
         <div class="container">
           <div class="section-header">
-            <div class="section-kicker">Core Pillars</div>
+            <div class="section-kicker reveal">Core Pillars</div>
             <div>
-              <h2>Built around privacy, taste, and enduring value.</h2>
+              <h2 class="reveal">Built around privacy, taste, and enduring value.</h2>
             </div>
           </div>
 
           <div class="pillars">
-            <article class="pillar-card">
+            <article class="pillar-card reveal">
               <div>
                 <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
                   <path d="M12 30L32 14l20 16" />
@@ -756,7 +890,7 @@
               </div>
             </article>
 
-            <article class="pillar-card">
+            <article class="pillar-card reveal reveal-delay-1">
               <div>
                 <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
                   <path d="M18 46c8-18 20-18 28 0" />
@@ -773,7 +907,7 @@
               </div>
             </article>
 
-            <article class="pillar-card">
+            <article class="pillar-card reveal reveal-delay-2">
               <div>
                 <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
                   <path d="M16 46h32" />
@@ -796,13 +930,13 @@
       <section class="section" id="residences">
         <div class="container">
           <div class="section-header">
-            <div class="section-kicker">What Puri Offers</div>
+            <div class="section-kicker reveal">What Puri Offers</div>
             <div>
-              <h2>Discreet residential guidance for those who seek more than an address.</h2>
-              <p class="lead">
+              <h2 class="reveal">Discreet residential guidance for those who seek more than an address.</h2>
+              <p class="lead reveal reveal-delay-1">
                 Every residence is considered through lifestyle, atmosphere, privacy, architecture, access, and long-term fit — not through visibility alone.
               </p>
-              <div class="residence-types" aria-label="Residence types">
+              <div class="residence-types reveal reveal-delay-2" aria-label="Residence types">
                 <span class="tag">Private Villas</span>
                 <span class="tag">Penthouses</span>
                 <span class="tag">Bungalows</span>
@@ -814,7 +948,7 @@
           </div>
 
           <div class="offers-grid">
-            <article class="offer-card">
+            <article class="offer-card reveal">
               <div class="offer-meta"><span></span> 01</div>
               <h3>Private Residence Sourcing</h3>
               <p>
@@ -822,7 +956,7 @@
               </p>
             </article>
 
-            <article class="offer-card">
+            <article class="offer-card reveal reveal-delay-1">
               <div class="offer-meta"><span></span> 02</div>
               <h3>Estate &amp; Bespoke Living Advisory</h3>
               <p>
@@ -830,7 +964,7 @@
               </p>
             </article>
 
-            <article class="offer-card">
+            <article class="offer-card reveal reveal-delay-1">
               <div class="offer-meta"><span></span> 03</div>
               <h3>Luxury Residence Evaluation</h3>
               <p>
@@ -838,7 +972,7 @@
               </p>
             </article>
 
-            <article class="offer-card">
+            <article class="offer-card reveal reveal-delay-2">
               <div class="offer-meta"><span></span> 04</div>
               <h3>Residence Curation</h3>
               <p>
@@ -851,25 +985,25 @@
 
       <section class="section" id="approach">
         <div class="container approach-grid">
-          <div class="quote-panel">
+          <div class="quote-panel reveal">
             <p>For those who understand that the finest homes are rarely the loudest.</p>
             <div class="small">Puri · Private Residences &amp; Bespoke Living</div>
           </div>
 
           <div>
-            <div class="section-kicker">The Puri Approach</div>
+            <div class="section-kicker reveal">The Puri Approach</div>
             <div class="approach-list" style="margin-top: 48px;">
-              <article class="approach-card">
+              <article class="approach-card reveal">
                 <h3>Discreet</h3>
                 <p>Every enquiry is handled with privacy and care. We do not believe in loud transactions or unnecessary exposure.</p>
               </article>
 
-              <article class="approach-card">
+              <article class="approach-card reveal reveal-delay-1">
                 <h3>Considered</h3>
                 <p>Every residence is reviewed through the lens of lifestyle, atmosphere, security, function, and long-term value.</p>
               </article>
 
-              <article class="approach-card">
+              <article class="approach-card reveal reveal-delay-2">
                 <h3>Curated</h3>
                 <p>Nothing is selected at random. Each recommendation must carry a sense of purpose, taste, and permanence.</p>
               </article>
@@ -880,7 +1014,7 @@
 
       <section class="cta-section" id="enquiry">
         <div class="container">
-          <div class="cta-box">
+          <div class="cta-box reveal">
             <div>
               <div class="section-kicker">Begin With Discretion</div>
               <h2>A private residence begins with a private conversation.</h2>
@@ -904,5 +1038,83 @@
       </div>
     </footer>
   </div>
+
+  <script>
+    /* ─────────────────────────────────────────
+       1. Custom cursor
+    ───────────────────────────────────────── */
+    const cursor = document.getElementById('cursor');
+
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+
+    document.querySelectorAll('a, .pillar-card, .offer-card, .approach-card, .tag, .btn').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('large'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('large'));
+    });
+
+    /* ─────────────────────────────────────────
+       2. Hero title — letter by letter
+    ───────────────────────────────────────── */
+    const titleEl = document.getElementById('hero-title');
+    const word = 'Puri';
+
+    word.split('').forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.textContent = ch;
+      span.style.transitionDelay = `${0.28 + i * 0.09}s`;
+      titleEl.appendChild(span);
+    });
+
+    // Trigger on next paint
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        titleEl.querySelectorAll('span').forEach(s => s.classList.add('visible'));
+      });
+    });
+
+    /* ─────────────────────────────────────────
+       3. Hero supporting elements fade-in
+    ───────────────────────────────────────── */
+    document.querySelectorAll('.hero-eyebrow-anim, .hero-sub-anim, .hero-buttons-anim, .hero-card-anim').forEach(el => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => el.classList.add('visible'));
+      });
+    });
+
+    /* ─────────────────────────────────────────
+       4. Scroll reveal (IntersectionObserver)
+    ───────────────────────────────────────── */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* ─────────────────────────────────────────
+       5. Hero parallax on scroll
+    ───────────────────────────────────────── */
+    const hero = document.querySelector('.hero');
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      // Subtle parallax: shift the grid background slightly
+      hero.style.backgroundPosition = `0 ${y * 0.28}px`;
+
+      // Fade hero content gently
+      const heroContent = hero.querySelector('.hero-grid');
+      if (heroContent) {
+        heroContent.style.transform = `translateY(${y * 0.08}px)`;
+        heroContent.style.opacity = Math.max(0, 1 - y / 600);
+      }
+    }, { passive: true });
+  </script>
 </body>
 </html>
